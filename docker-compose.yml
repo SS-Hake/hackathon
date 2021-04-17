@@ -1,0 +1,25 @@
+# base server app
+app:
+    build: ./
+    volumes:
+        - ./:/var/www/app
+    # TODO: swap this for prod
+    ports:
+        - 3000:3000
+    environment:
+        - NODE_ENV=development
+        - PORT=3000
+    # runs this on startup to install node modules and begin server
+    command:
+        sh -c 'npm i && node server.js'
+    # some definitions
+    links:
+        - redis
+    environment:
+        - REDIS_URL=redis://cache
+        # rest of the environment definitions
+redis:
+    image: redis
+    container_name: cache
+    expose: 
+        - 6379
